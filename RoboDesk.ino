@@ -21,6 +21,8 @@ unsigned long last_latch = 0;
 
 LogicData ld(INTF_TX);
 
+uint8_t height;
+uint8_t target;
 
 //-- Pass through mode sends input signal straight to output
 inline void passThrough(uint8_t out, uint8_t in) {
@@ -167,6 +169,7 @@ void check_display() {
   if (ld.IsNumber(msg)) {
     static uint8_t prev_number;
     auto display_num = ld.GetNumber(msg);
+    height = display_num;
     if (display_num == prev_number) {
       return;
     }
@@ -190,6 +193,15 @@ void hold_latch() {
   #endif
 
   if (!is_latched()) return;
+
+  if(height != target) {
+    return;
+  } else {
+    display_buttons(get_latched(), "Hit Target");
+    Serial.println(target);
+    break_latch();
+    return;
+  }
 
   unsigned long delta = millis() - last_signal;
 
@@ -234,10 +246,22 @@ void check_actions() {
   // If we're latched here, then buttons is same as latched or else buttons is NONE
   switch (buttons) {
     case UP:
+      target = 40;
+      if (is_latched()) {
+        latch(buttons, 42000);
+      } else {
+        latch(buttons, 500);
+      }
+      break;
+
     case DOWN:
-      // Add 4s to travel for each button press
-      if (is_latched()) latch(buttons, 4000);
-      else latch(buttons, 1000);
+      //If it's latched, go till target
+      target = 28;
+      if (is_latched()) {
+        latch(buttons, 42000);
+      } else {
+        latch(buttons, 500);
+      }
       break;
 
     case MEM1:
