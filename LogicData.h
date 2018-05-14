@@ -64,7 +64,7 @@ struct mque {
   // non-destructive indexed peek
   bool peek(index_t index, micros_t * t);
 };
-  
+
 // queue
 //
 //--------------------------------------------------
@@ -82,7 +82,7 @@ class LogicData
   mque q;
 
   micros_t prev_bit = 0;
-   
+
   public:
 
   enum { SPACE=0, MARK=1 };
@@ -108,13 +108,13 @@ class LogicData
   bool IsValid(uint32_t msg);
   bool IsNumber(uint32_t msg);
   uint8_t GetNumber(uint32_t msg);
-  
+
   // debug: not threadsafe
   index_t QueueSize(index_t &h, index_t &t){
     lock _;
     h = q.head;
     t = q.tail;
-    return q.size(); 
+    return q.size();
   }
 
   // Transmit

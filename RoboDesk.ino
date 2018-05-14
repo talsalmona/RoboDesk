@@ -1,6 +1,18 @@
-#include "pins_trinket_pro.h"
+#include "pins.h"
 #include "LogicData.h"
 #include "buttons.h"
+
+
+// 7 pin din socket
+
+//1: RxD
+//2: HS3
+//3: HS1 up
+//4: HS4
+//5: HS2 down
+//6: TxD
+//7: +5V
+//shell: Ground
 
 //#define DISABLE_LATCHING
 
@@ -124,7 +136,7 @@ void setup() {
   pinMode(MOD_HS4, INPUT);
 
   dataGather();
-  attachInterrupt(MOD_TX_interrupt, dataGather, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(MOD_TX), dataGather, CHANGE);
 
   ld.Begin();
   delay(1000);
@@ -182,7 +194,7 @@ void hold_latch() {
   unsigned long delta = millis() - last_signal;
 
   unsigned long activity_timeout = (last_signal - last_latch < 2000) ? 2500 : 1500 ;
-  
+
   // Let go after 500ms with no signals
   if (delta > activity_timeout) {
     display_buttons(get_latched(), "Idle");
@@ -194,11 +206,12 @@ void hold_latch() {
 // Check the buttons
 void check_actions() {
   // quick-read buttons
-  auto buttons = read_buttons(); 
-  
+  auto buttons = read_buttons();
+
   if (buttons && is_latched() && buttons != get_latched()) {
+    //TODO: This doesn't trigger correctly all the time
     break_latch();
-    
+
     display_buttons(buttons, "Interrupted");
 
     // Drain all button events from handset interface so the interruption doesn't become a command
@@ -210,11 +223,12 @@ void check_actions() {
   // read and display button changes
   static unsigned prev = NONE;
   buttons = read_buttons_debounce();
-   
+
+
   // Ignore unchanged state
   if (buttons == prev) return;
   prev = buttons;
-  
+
   // If we're latched here, then buttons is same as latched or else buttons is NONE
   switch (buttons) {
     case UP:
@@ -223,7 +237,7 @@ void check_actions() {
       if (is_latched()) latch(buttons, 4000);
       else latch(buttons, 1000);
       break;
-      
+
     case MEM1:
     case MEM2:
     case MEM3:

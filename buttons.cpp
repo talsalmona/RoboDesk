@@ -1,6 +1,6 @@
 #include "buttons.h"
 #include "Arduino.h"
-#include "pins_trinket_pro.h"
+#include "pins.h"
 
 /** Interface to Robodesk handset buttons
  */
@@ -54,6 +54,7 @@ void latch_pin(int pin)
 #ifndef DISABLE_LATCHING
   pinMode(pin, OUTPUT);
   digitalWrite(pin, HIGH);
+  delay(1);
 #endif
 }
 
@@ -108,10 +109,11 @@ unsigned read_buttons() {
   unlatch();
   if (digitalRead(MOD_HS1)) buttons |= HS1;
   if (digitalRead(MOD_HS2)) buttons |= HS2;
-  if (digitalRead(MOD_HS3)) buttons |= HS3;
-  if (digitalRead(MOD_HS4)) buttons |= HS4;
+  //TODO: figure out why these were triggering while unconnected
+  //if (digitalRead(MOD_HS3)) buttons |= HS3;
+  //if (digitalRead(MOD_HS4)) buttons |= HS4;
   apply_latch();
-  
+
   return buttons;
 }
 
@@ -130,7 +132,7 @@ unsigned read_buttons_debounce() {
   // Wait for interface to drain
   if (draining and prev_buttons) return NONE;
   draining = false;
-  
+
   unsigned buttons = prev_buttons;
 
   // Ignore spurious signals
@@ -145,7 +147,7 @@ unsigned read_buttons_debounce() {
   }
 
   display_buttons(buttons);
-  
+
   return buttons;
 }
 
