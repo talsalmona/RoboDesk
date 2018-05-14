@@ -214,10 +214,12 @@ void check_actions() {
 
     display_buttons(buttons, "Interrupted");
 
-    // Drain all button events from handset interface so the interruption doesn't become a command
-    clear_buttons();
+    if(buttons == UP || buttons == DOWN) {
+      // Drain all button events from handset interface so the interruption doesn't become a command
+      clear_buttons();
 
-    return;
+      return;
+    }
   }
 
   // read and display button changes

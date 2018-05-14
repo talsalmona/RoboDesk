@@ -142,7 +142,7 @@ unsigned read_buttons_debounce() {
   if (!buttons) debounce = millis();
 
   // ignore signal until stable for 1-2ms
-  if (millis()-debounce < 2) {
+  if (millis()-debounce < 40) {
     buttons = NONE;
   }
 
