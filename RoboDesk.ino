@@ -246,7 +246,7 @@ void check_actions() {
   // If we're latched here, then buttons is same as latched or else buttons is NONE
   switch (buttons) {
     case UP:
-      target = 40;
+      target = 41;
       if (is_latched()) {
         latch(buttons, 42000);
       } else {
