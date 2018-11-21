@@ -37,7 +37,7 @@ void dataPassThrough() {
 unsigned gather_test = 0;
 //-- Buffered mode parses input words and sends them to output separately
 void dataGather() {
-  digitalWrite(LED, digitalRead(MOD_TX));
+  digitalWrite(STATUS_LED, digitalRead(MOD_TX));
   ld.PinChange(HIGH == digitalRead(MOD_TX));
   gather_test++;
 //  passThrough(5, MOD_TX);
@@ -146,9 +146,9 @@ void setup() {
 //  unsigned size = sizeof(test_display_stream) / sizeof(test_display_stream[0]);
 //  ld.Send(test_display_stream, size);
 
-  #ifdef LED
-    pinMode(LED, OUTPUT);
-  #endif
+  pinMode(STATUS_LED, OUTPUT);
+  pinMode(POWER_LED, OUTPUT);
+  digitalWrite(POWER_LED, 1);
   Serial.begin(115200);
   Serial.println("Robodesk v1.0  build: " __DATE__ " " __TIME__);
 }
@@ -188,9 +188,7 @@ void latch(unsigned latch_pins, unsigned long max_latch_time = 15000) {
 
 // Time out stale latches
 void hold_latch() {
-  #ifdef LED
-    digitalWrite(LED, is_latched());
-  #endif
+  digitalWrite(STATUS_LED, is_latched());
 
   if (!is_latched()) return;
 
