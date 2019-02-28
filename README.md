@@ -1,6 +1,8 @@
 # RoboDesk
 Arduino code for LOGICDATA protocol and remote handset hacking for automated standing desk
 
+Mirrored from [mtfurlan/RoboDesk](https://github.com/mtfurlan/RoboDesk)
+
 Current features:
 * Double tap a direction to go to a target height
 
