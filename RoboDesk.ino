@@ -1,6 +1,7 @@
 #include "pins.h"
 #include "LogicData.h"
 #include "buttons.h"
+#include <EEPROM.h>
 
 
 // 7 pin din socket
@@ -16,8 +17,16 @@
 
 //#define DISABLE_LATCHING
 
+#define LOWEST 65
+#define HIGHEST 130
+
+//Initial values for when we haven't saved a preset before
+unsigned int HEIGHT_HIGH = HIGHEST;
+unsigned int HEIGHT_LOW  = LOWEST;
+
 unsigned long last_signal = 0;
 unsigned long last_latch = 0;
+unsigned int last_direction = -1;
 
 LogicData ld(INTF_TX);
 
@@ -129,6 +138,7 @@ uint32_t test_display_set[] = {
 };
 
 void setup() {
+  
   pinMode(MOD_TX, INPUT);
 //  digitalWrite(MOD_TX, HIGH); // turn on pullups (Needed for attiny85)
 
@@ -137,20 +147,38 @@ void setup() {
   pinMode(MOD_HS3, INPUT);
   pinMode(MOD_HS4, INPUT);
 
+  pinMode(STATUS_LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+
   dataGather();
   attachInterrupt(digitalPinToInterrupt(MOD_TX), dataGather, CHANGE);
 
   ld.Begin();
   delay(1000);
 
-//  unsigned size = sizeof(test_display_stream) / sizeof(test_display_stream[0]);
-//  ld.Send(test_display_stream, size);
+  //unsigned size = sizeof(test_display_stream) / sizeof(test_display_stream[0]);
+  //ld.Send(test_display_stream, size);
 
-  pinMode(STATUS_LED, OUTPUT);
-  pinMode(POWER_LED, OUTPUT);
-  digitalWrite(POWER_LED, 1);
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Robodesk v1.0  build: " __DATE__ " " __TIME__);
+  readPresets(); 
+  buzz(440, 100);
+  buzz(440, 100);
+}
+
+void buzz(long frequency, long length) {
+  long delayValue = 1000000/frequency/2; // calculate the delay value between transitions
+  //// 1 second's worth of microseconds, divided by the frequency, then split in half since
+  //// there are two phases to each cycle
+  long numCycles = frequency * length/ 1000; // calculate the number of cycles for proper timing
+  //// multiply frequency, which is really cycles per second, by the number of seconds to 
+  //// get the total number of cycles to produce
+  for (long i=0; i < numCycles; i++){ // for the calculated length of time...
+    digitalWrite(BUZZER,HIGH); // write the buzzer pin high to push out the diaphram
+    delayMicroseconds(delayValue); // wait for the calculated delay value
+    digitalWrite(BUZZER,LOW); // write the buzzer pin low to pull back the diaphram
+    delayMicroseconds(delayValue); // wait again or the calculated delay value
+  }
 }
 
 // Record last time the display changed
@@ -170,6 +198,7 @@ void check_display() {
     static uint8_t prev_number;
     auto display_num = ld.GetNumber(msg);
     height = display_num;
+    
     if (display_num == prev_number) {
       return;
     }
@@ -177,6 +206,7 @@ void check_display() {
   }
   if (msg)
     last_signal = millis();
+
 }
 
 void latch(unsigned latch_pins, unsigned long max_latch_time = 15000) {
@@ -196,7 +226,6 @@ void hold_latch() {
     return;
   } else {
     display_buttons(get_latched(), "Hit Target");
-    Serial.println(target);
     break_latch();
     return;
   }
@@ -244,7 +273,10 @@ void check_actions() {
   // If we're latched here, then buttons is same as latched or else buttons is NONE
   switch (buttons) {
     case UP:
-      target = 41;
+      target = HEIGHT_HIGH;
+      Serial.print("Moving to height: ");
+      Serial.println(target);
+      last_direction = UP;
       if (is_latched()) {
         latch(buttons, 42000);
       } else {
@@ -254,7 +286,10 @@ void check_actions() {
 
     case DOWN:
       //If it's latched, go till target
-      target = 28;
+      target = HEIGHT_LOW;
+      Serial.print("Moving to height: ");
+      Serial.println(target);      
+      last_direction = DOWN;
       if (is_latched()) {
         latch(buttons, 42000);
       } else {
@@ -268,11 +303,48 @@ void check_actions() {
       latch(buttons);
       break;
 
-    // Ignore all other buttons (SET, NONE)
+    case SET:
+      writePresets();
+      break;
+    // Ignore all other buttons (NONE)
     default:
       return;
   }
 }
+
+void writePresets() {
+  if (last_direction == UP) {  
+    HEIGHT_HIGH = height;    
+    EEPROM.write(0, height);
+    Serial.print("Wrote high target: ");
+    Serial.println(height);
+    buzz(440, 300);
+    buzz(493, 300);
+    buzz(523, 300);
+  }
+  else if (last_direction == DOWN) {
+    HEIGHT_LOW = height;
+    EEPROM.write(100, height);
+    Serial.print("Wrote low target: ");
+    Serial.println(height);
+    buzz(523, 300);
+    buzz(493, 300);
+    buzz(440, 300);
+  }  
+}
+
+void readPresets() {
+  HEIGHT_HIGH = EEPROM.read(0);
+  HEIGHT_LOW = EEPROM.read(100);
+
+  if (HEIGHT_HIGH > HIGHEST) HEIGHT_HIGH = HIGHEST;
+  if (HEIGHT_LOW < LOWEST) HEIGHT_LOW = LOWEST;
+  Serial.print("Read presets - high: ");
+  Serial.print(HEIGHT_HIGH);
+  Serial.print(", low: ");
+  Serial.println(HEIGHT_LOW);
+}
+
 
 #ifdef DEBUG_QUEUE
 void debug_queue() {
@@ -299,10 +371,28 @@ void debug_queue() {
 }
 #endif
 
+void demo() {
+  pinMode(MOD_HS1, OUTPUT);
+  pinMode(MOD_HS2, OUTPUT);
+
+  digitalWrite(MOD_HS1, HIGH);
+  delay(4000);
+  digitalWrite(MOD_HS1, LOW);
+
+  digitalWrite(MOD_HS2, HIGH);
+  delay(4000);
+  digitalWrite(MOD_HS2, LOW);
+
+}
+
 void loop() {
   // Monitor panel buttons for our commands and take over when we see one
 
   check_actions();
   check_display();
   hold_latch();
+
+
+  //demo();
+
 }

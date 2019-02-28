@@ -1,14 +1,21 @@
 // Input
-#define MOD_TX  13 // Pin 13/D7 on nodemcu supports interrupts
+#define MOD_TX  2 // Pin 13/D7 on nodemcu supports interrupts
 
 //unused? TX pin for LogicData class.
-#define INTF_TX 9
+#define INTF_TX 10 // not used
 
 // Input/Output (v1.0 cable pins are arranged in this order)
-#define MOD_HS2 14 //D5
-#define MOD_HS4 5 //D1
-#define MOD_HS1 12 //D6
-#define MOD_HS3 16 //D0
+#define MOD_HS1 4 
+#define MOD_HS2 3 
+#define MOD_HS3 15 //not used
+#define MOD_HS4 16  //not used
 
-#define POWER_LED 2 //D4
-#define STATUS_LED 4 //D2; this was D0 which is HS3?
+#define STATUS_LED 13 //D2; this was D0 which is HS3?
+
+#define BUZZER 5
+
+// red - vin
+// brown - ground
+// blue - tx
+// yellow - HS2
+// orange - HS1
