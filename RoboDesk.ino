@@ -4,20 +4,9 @@
 #include <EEPROM.h>
 
 
-// 7 pin din socket
-
-//1: RxD
-//2: HS3
-//3: HS1 up
-//4: HS4
-//5: HS2 down
-//6: TxD
-//7: +5V
-//shell: Ground
-
 //#define DISABLE_LATCHING
 
-#define LOWEST 65
+#define LOWEST 60
 #define HIGHEST 130
 
 //Initial values for when we haven't saved a preset before
@@ -43,13 +32,10 @@ void dataPassThrough() {
   if (!ld.is_active()) passThrough(INTF_TX, MOD_TX);
 }
 
-unsigned gather_test = 0;
 //-- Buffered mode parses input words and sends them to output separately
 void dataGather() {
   digitalWrite(STATUS_LED, digitalRead(MOD_TX));
   ld.PinChange(HIGH == digitalRead(MOD_TX));
-  gather_test++;
-//  passThrough(5, MOD_TX);
 }
 
 
@@ -73,14 +59,9 @@ void setup() {
   ld.Begin();
   delay(1000);
 
-  //unsigned size = sizeof(test_display_stream) / sizeof(test_display_stream[0]);
-  //ld.Send(test_display_stream, size);
-
   Serial.begin(9600);
   Serial.println("Robodesk v1.0  build: " __DATE__ " " __TIME__);
   readPresets(); 
-  buzz(440, 100);
-  buzz(440, 100);
 }
 
 void buzz(long frequency, long length) {
@@ -254,33 +235,12 @@ void readPresets() {
   Serial.print(HEIGHT_HIGH);
   Serial.print(", low: ");
   Serial.println(HEIGHT_LOW);
+
+  buzz(440, 200);
+  buzz(880, 200);
+  buzz(1760, 200);
 }
 
-
-#ifdef DEBUG_QUEUE
-void debug_queue() {
-  static size_t prevQ = 0;
-  index_t h, t;
-  size_t Q = ld.QueueSize(h, t);
-  if (Q != prevQ) {
-    Serial.print("Q: t=");
-    Serial.print(t);
-    Serial.print(" h=");
-    Serial.print(h);
-    Serial.print(" size=");
-    Serial.print(Q);
-    Serial.print(" [");
-    micros_t lead;
-    size_t i=0;
-    while (ld.q.peek(i++, &lead)) {
-      Serial.print(lead);
-      Serial.print(", ");
-    }
-    Serial.println("]");
-    prevQ = Q;
-  }
-}
-#endif
 
 void demo() {
   pinMode(MOD_HS1, OUTPUT);

@@ -17,3 +17,14 @@
 // blue - tx
 // yellow - HS2
 // orange - HS1
+
+// 7 pin din socket
+
+//1: RxD
+//2: HS3
+//3: HS1 up
+//4: HS4
+//5: HS2 down
+//6: TxD
+//7: +5V
+//shell: Ground
