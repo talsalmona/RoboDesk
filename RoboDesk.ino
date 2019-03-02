@@ -54,89 +54,6 @@ void dataGather() {
 
 
 
-uint32_t test_display_stream[] = {
-    0x40600495,
-    0x40600594,
-    0x40600455,
-    0x40600554,
-    0x406004d4,
-    0x406005d5,
-    0x40600435,
-    0x40600534,
-    0x406004b4,
-    0x406005b5,
-    0x40600474,
-    0x40600575,
-    0x406004f5,
-    0x406005f4,
-    0x4060040c,
-    0x4060050d,
-    0x4060048d,
-    0x4060058c,
-    0x4060044d,
-    0x4060054c,
-    0x406004cc,
-    0x406005cd,
-    0x4060042d,
-    0x4060052c,
-    0x406004ac,
-    0x406005ad,
-    0x4060046c,
-    0x4060056d,
-    0x40601dfe,
-    0x406004ed,
-    0x40649dfb,
-    0x406005ec,
-    0x4060041d,
-    0x4060051c,
-    0x4060049c
-};
-uint32_t test_display_word[] = {
-    // display word?
-    0x40601dfe,
-    0x40600515,
-    0x40649dfb
-};
-
-uint32_t test_display_off[] = {
-    // display OFF
-    0x40601dfe,
-    0x40600515,
-    0x40649dfb,
-    0x406e1400
-};
-uint32_t test_display_set[] = {
-    // Enters "SET" mode; display commands have no effect until undone; Display: "S -"
-    0x40641400,
-
-    // Set 3 chosen; Display: "S 3"
-    0x406c1d80,
-
-    // "S 3" idle
-    0x40601dfe,
-    0x406c1d80,
-    0x40649dfb,
-
-    // ----------------------------------------
-    // Display "120"
-    0x40681400,
-    0x4060043c,
-    0x40649dfb,
-    // ----------------------------------------
-    // Display "120"
-    0x40601dfe,
-    0x4060043c,
-    0x40649dfb,
-    // ----------------------------------------
-    // Display "120"
-    0x40601dfe,
-    0x4060043c,
-    0x40649dfb,
-    // ----------------------------------------
-    // Display off
-    0x406e1400
-};
-
 void setup() {
   
   pinMode(MOD_TX, INPUT);
@@ -144,8 +61,8 @@ void setup() {
 
   pinMode(MOD_HS1, INPUT);
   pinMode(MOD_HS2, INPUT);
-  pinMode(MOD_HS3, INPUT);
-  pinMode(MOD_HS4, INPUT);
+//  pinMode(MOD_HS3, INPUT);
+//  pinMode(MOD_HS4, INPUT);
 
   pinMode(STATUS_LED, OUTPUT);
   pinMode(BUZZER, OUTPUT);
@@ -297,12 +214,6 @@ void check_actions() {
       }
       break;
 
-    case MEM1:
-    case MEM2:
-    case MEM3:
-      latch(buttons);
-      break;
-
     case SET:
       writePresets();
       break;
@@ -391,7 +302,6 @@ void loop() {
   check_actions();
   check_display();
   hold_latch();
-
 
   //demo();
 
