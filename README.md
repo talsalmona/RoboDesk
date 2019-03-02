@@ -8,8 +8,13 @@ Mirrored from [mtfurlan/RoboDesk](https://github.com/mtfurlan/RoboDesk)
 * Double tap up / down buttons to go to the high / low preset position
 
 # Board
-Currently works with an Arduino Uno or Nano because requires 5v logic.
+Currently works with an Arduino Uno or Nano because it requires 5v logic.
 In the future we intend to move to an ESP8266 board.
+
+# Current Hardware
+* Arduino Nano
+* DIN 7 connector
+* Piezo buzzer
 
 # Wiring
 Can be found in [pins.h](pins.h)
