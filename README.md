@@ -28,10 +28,12 @@ In the future we intend to move to an ESP8266 board.
 
 ## Prepare the DIN7 Connector
 1. Take note of the following diagram 
+
 ![DIN7-wiring](https://github.com/talsalmona/RoboDesk/blob/master/demo/din7-layout.png)
 2. You will need to wire +5V, Ground, HS1, HS2 and RxD.
 3. Cut one end of the wires and solder onto the DIN7 connector
 4. Optionally, use epoxy glue to make sure the soldering holds
+
 ![DIN7-a](https://github.com/talsalmona/RoboDesk/blob/master/demo/din7a.jpg)
 ![DIN7-b](https://github.com/talsalmona/RoboDesk/blob/master/demo/din7b.jpg)
 
