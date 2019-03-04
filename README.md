@@ -1,8 +1,9 @@
 # RoboDesk
 Arduino code for LOGICDATA protocol and remote handset hacking for automated standing desk
+
 (LogicData data sheet can be found [here](https://web.archive.org/web/20180514132622/http://www.logicdata.net/wp-content/uploads/2017/05/Datasheet_Compact_English-Rev4.pdf))
 
-Mirrored from [mtfurlan/RoboDesk](https://github.com/mtfurlan/RoboDesk)
+Based on the great work of [mtfurlan](https://github.com/mtfurlan/RoboDesk) and [phord](https://github.com/phord/RoboDesk)
 
 # Demo
 ![demo](https://github.com/talsalmona/RoboDesk/blob/master/demo/photo.jpg)
