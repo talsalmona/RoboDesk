@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/talsalmona/RoboDesk.svg?branch=master)](https://travis-ci.org/talsalmona/RoboDesk)
+
 # RoboDesk
 Arduino code for LOGICDATA protocol and remote handset hacking for automated standing desk
 
