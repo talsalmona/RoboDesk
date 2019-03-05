@@ -31,7 +31,7 @@ If using ESP8266 instead of an Arduino:
 * [ESP8266 Microcontroller](https://www.aliexpress.com/item/ESP8266-CH340G-NodeMcu-V3-Lua-Wireless-WIFI-Module-Connector-Development-Board-ESP-12E-Micro-USB-ESP8266/32836079459.html?spm=a2g0s.9042311.0.0.6c234c4djEkykF) - Get one with a CP2102 chip
 
 ## Prepare the DIN7 Connector
-1. Take note of the following diagram 
+1. Take note of the following diagram - it represents the pins when looking at the connector from the back (where you would need to solder the wires)
 
 ![DIN7-wiring](https://github.com/talsalmona/RoboDesk/blob/master/demo/din7-layout.png)
 
