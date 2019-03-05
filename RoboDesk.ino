@@ -238,7 +238,7 @@ void readPresets() {
 
   buzz(440, 200);
   buzz(880, 200);
-  buzz(1760, 200);
+  buzz(440, 200);
 }
 
 

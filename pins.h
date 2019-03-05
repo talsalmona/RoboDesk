@@ -1,7 +1,7 @@
 // Input
 #define MOD_TX  2 // TxD - Must use a an interrupt pin
-#define MOD_HS1 4 
-#define MOD_HS2 3 
+#define MOD_HS1 3 
+#define MOD_HS2 4 
 
 //optional
 #define BUZZER 5
@@ -13,9 +13,9 @@
 // 7 pin din socket
 //1: RxD
 //2: HS3
-//3: HS1 up
+//3: HS1 up - grey
 //4: HS4
-//5: HS2 down
+//5: HS2 down - purple
 //6: TxD
-//7: +5V
-//shell: Ground
+//7: +5V - white
+//shell: Ground - black
