@@ -54,6 +54,6 @@ The easiest way to upload the code is to open it in the Arduino IDE and flash it
 
 ## Print a Case (WIP)
 Use a 3D printer to print a case
-Models are available in the ![box](https://github.com/talsalmona/RoboDesk/blob/master/box) folder
+Models are available in the [box](https://github.com/talsalmona/RoboDesk/blob/master/box) folder
 
 
