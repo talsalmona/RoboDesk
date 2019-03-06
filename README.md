@@ -52,3 +52,8 @@ Wire the board according to the mapping that can be found in [pins.h](pins.h)
 ## Upload the Code
 The easiest way to upload the code is to open it in the Arduino IDE and flash it onto thr board.
 
+## Print a Case (WIP)
+Use a 3D printer to print a case
+Models are available in the ![box](https://github.com/talsalmona/RoboDesk/blob/master/box) folder
+
+
