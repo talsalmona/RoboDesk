@@ -33,7 +33,7 @@ void dataPassThrough() {
 }
 
 //-- Buffered mode parses input words and sends them to output separately
-void dataGather() {
+void IRAM_ATTR dataGather() {
   digitalWrite(STATUS_LED, digitalRead(MOD_TX));
   ld.PinChange(HIGH == digitalRead(MOD_TX));
 }
@@ -41,9 +41,11 @@ void dataGather() {
 
 
 void setup() {
+  Serial.begin(115200);
+  Serial.println("Setting up... ");
   
   pinMode(MOD_TX, INPUT);
-//  digitalWrite(MOD_TX, HIGH); // turn on pullups (Needed for attiny85)
+  //digitalWrite(MOD_TX, HIGH); // turn on pullups (Needed for attiny85)
 
   pinMode(MOD_HS1, INPUT);
   pinMode(MOD_HS2, INPUT);
@@ -54,12 +56,14 @@ void setup() {
   pinMode(BUZZER, OUTPUT);
 
   dataGather();
+  Serial.println("Attaching interrupt");
   attachInterrupt(digitalPinToInterrupt(MOD_TX), dataGather, CHANGE);
+  Serial.println("Interrupt attached");
 
   ld.Begin();
   delay(1000);
 
-  Serial.begin(9600);
+  
   Serial.println("Robodesk v1.0  build: " __DATE__ " " __TIME__);
   readPresets(); 
 }
