@@ -2,7 +2,7 @@
 #include "LogicData.h"
 #include "buttons.h"
 #include <EEPROM.h>
-
+#include <ESP8266WiFi.h>
 
 //#define DISABLE_LATCHING
 
@@ -33,7 +33,7 @@ void dataPassThrough() {
 }
 
 //-- Buffered mode parses input words and sends them to output separately
-void IRAM_ATTR dataGather() {
+void ICACHE_RAM_ATTR /*IRAM_ATTR*/ dataGather() {
   digitalWrite(STATUS_LED, digitalRead(MOD_TX));
   ld.PinChange(HIGH == digitalRead(MOD_TX));
 }
@@ -42,15 +42,17 @@ void IRAM_ATTR dataGather() {
 
 void setup() {
   Serial.begin(115200);
+  delay(1000);
   Serial.println("Setting up... ");
-  
+  connectToWifi();
+
   pinMode(MOD_TX, INPUT);
   //digitalWrite(MOD_TX, HIGH); // turn on pullups (Needed for attiny85)
 
   pinMode(MOD_HS1, INPUT);
   pinMode(MOD_HS2, INPUT);
-//  pinMode(MOD_HS3, INPUT);
-//  pinMode(MOD_HS4, INPUT);
+  //  pinMode(MOD_HS3, INPUT);
+  //  pinMode(MOD_HS4, INPUT);
 
   pinMode(STATUS_LED, OUTPUT);
   pinMode(BUZZER, OUTPUT);
@@ -63,22 +65,21 @@ void setup() {
   ld.Begin();
   delay(1000);
 
-  
   Serial.println("Robodesk v1.0  build: " __DATE__ " " __TIME__);
-  readPresets(); 
+  readPresets();
 }
 
 void buzz(long frequency, long length) {
-  long delayValue = 1000000/frequency/2; // calculate the delay value between transitions
+  long delayValue = 1000000 / frequency / 2; // calculate the delay value between transitions
   //// 1 second's worth of microseconds, divided by the frequency, then split in half since
   //// there are two phases to each cycle
-  long numCycles = frequency * length/ 1000; // calculate the number of cycles for proper timing
-  //// multiply frequency, which is really cycles per second, by the number of seconds to 
+  long numCycles = frequency * length / 1000; // calculate the number of cycles for proper timing
+  //// multiply frequency, which is really cycles per second, by the number of seconds to
   //// get the total number of cycles to produce
-  for (long i=0; i < numCycles; i++){ // for the calculated length of time...
-    digitalWrite(BUZZER,HIGH); // write the buzzer pin high to push out the diaphram
+  for (long i = 0; i < numCycles; i++) { // for the calculated length of time...
+    digitalWrite(BUZZER, HIGH); // write the buzzer pin high to push out the diaphram
     delayMicroseconds(delayValue); // wait for the calculated delay value
-    digitalWrite(BUZZER,LOW); // write the buzzer pin low to pull back the diaphram
+    digitalWrite(BUZZER, LOW); // write the buzzer pin low to pull back the diaphram
     delayMicroseconds(delayValue); // wait again or the calculated delay value
   }
 }
@@ -92,7 +93,7 @@ void check_display() {
     uint32_t now = millis();
     sprintf(buf, "%6lums %s: %s", now - prev, ld.MsgType(msg), ld.Decode(msg));
     Serial.println(buf);
-    prev=now;
+    prev = now;
   }
 
   // Reset idle-activity timer if display number changes or if any other display activity occurs (i.e. display-ON)
@@ -100,7 +101,7 @@ void check_display() {
     static uint8_t prev_number;
     auto display_num = ld.GetNumber(msg);
     height = display_num;
-    
+
     if (display_num == prev_number) {
       return;
     }
@@ -124,7 +125,7 @@ void hold_latch() {
 
   if (!is_latched()) return;
 
-  if(height != target) {
+  if (height != target) {
     return;
   } else {
     display_buttons(get_latched(), "Hit Target");
@@ -155,7 +156,7 @@ void check_actions() {
 
     display_buttons(buttons, "Interrupted");
 
-    if(buttons == UP || buttons == DOWN) {
+    if (buttons == UP || buttons == DOWN) {
       // Drain all button events from handset interface so the interruption doesn't become a command
       clear_buttons();
 
@@ -190,7 +191,7 @@ void check_actions() {
       //If it's latched, go till target
       target = HEIGHT_LOW;
       Serial.print("Moving to height: ");
-      Serial.println(target);      
+      Serial.println(target);
       last_direction = DOWN;
       if (is_latched()) {
         latch(buttons, 42000);
@@ -209,8 +210,8 @@ void check_actions() {
 }
 
 void writePresets() {
-  if (last_direction == UP) {  
-    HEIGHT_HIGH = height;    
+  if (last_direction == UP) {
+    HEIGHT_HIGH = height;
     EEPROM.write(0, height);
     Serial.print("Wrote high target: ");
     Serial.println(height);
@@ -226,7 +227,7 @@ void writePresets() {
     buzz(523, 300);
     buzz(493, 300);
     buzz(440, 300);
-  }  
+  }
 }
 
 void readPresets() {
@@ -258,6 +259,22 @@ void demo() {
   delay(4000);
   digitalWrite(MOD_HS2, LOW);
 
+}
+
+void connectToWifi() {
+  WiFi.begin("fbguest", "m0vefast");
+
+  Serial.print("Connecting");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    //Serial.print(".");
+    Serial.println(WiFi.status());
+  }
+  Serial.println();
+
+  Serial.print("Connected, IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {

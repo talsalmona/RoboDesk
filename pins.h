@@ -1,7 +1,7 @@
 // Input
-#define MOD_TX  2 // TxD - Must use a an interrupt pin
-#define MOD_HS1 3 
-#define MOD_HS2 4 
+#define MOD_TX  4 //D2 green TxD - Must use a an interrupt pin
+#define MOD_HS1 0 //D3 orange
+#define MOD_HS2 2  //D4 yellow
 
 //optional
 #define BUZZER 5
