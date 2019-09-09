@@ -26,10 +26,6 @@ Currently works with an Arduino Uno or Nano because it requires 5v logic.
 * [Soldering iron](https://www.aliexpress.com/item/220V-60W-Portable-Electric-Soldering-Iron-Adjustable-Temperature-Solder-Iron-5pcs-Tips-Welding-Repair-Tool-kit/32815385816.html?spm=a2g0s.9042311.0.0.27424c4dAZ936J) - or borrow from a friend
 * [Arduino Nano](https://www.aliexpress.com/item/Freeshipping-Nano-3-0-controller-compatible-for-arduino-nano-CH340-USB-driver-NO-CABLE/32341832857.html)
 
-If using ESP8266 instead of an Arduino:
-(This is still WIP)
-* [Logic Level Shifter](https://www.aliexpress.com/item/Logic-Level-Shifter-Bi-Directional-Four-way-two-way-logic-level-transformation/32473563225.html?spm=a2g0s.9042311.0.0.6c234c4djEkykF)
-* [ESP8266 Microcontroller](https://www.aliexpress.com/item/ESP8266-CH340G-NodeMcu-V3-Lua-Wireless-WIFI-Module-Connector-Development-Board-ESP-12E-Micro-USB-ESP8266/32836079459.html?spm=a2g0s.9042311.0.0.6c234c4djEkykF) - Get one with a CP2102 chip
 
 ## Prepare the DIN7 Connector
 1. Take note of the following diagram - it represents the pins when looking at the connector from the back (where you would need to solder the wires)
