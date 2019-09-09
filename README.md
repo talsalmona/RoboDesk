@@ -45,7 +45,7 @@ Currently works with an Arduino Uno or Nano because it requires 5v logic.
 Wire the board according to the mapping that can be found in [pins.h](pins.h)
 
 ## Upload the Code
-The easiest way to upload the code is to open it in the Arduino IDE and flash it onto thr board.
+The easiest way to upload the code is to open it in the Arduino IDE and flash it onto the board.
 
 ## Print a Case (WIP)
 Use a 3D printer to print a case
