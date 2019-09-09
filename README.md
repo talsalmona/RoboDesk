@@ -17,7 +17,6 @@ Based on the great work of [mtfurlan](https://github.com/mtfurlan/RoboDesk) and 
 
 # Board
 Currently works with an Arduino Uno or Nano because it requires 5v logic.
-In the future we intend to move to an ESP8266 board.
 
 # Step by Step Setup
 ## Buy the Following Components
